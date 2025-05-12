@@ -10,7 +10,7 @@
  * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/13_MC2DB/load.php
  *************************************************************/
 
-require_once("config.php");
+require_once("db_config.php");
 echo "This script receives HTTP POST messages and pushes their content into the database.";
 
 
@@ -60,7 +60,7 @@ $input = json_decode($inputJSON, true); // Dekodieren der JSON-Daten in ein Arra
 
 $wert = $input["wert"];
 # insert new user into db
-$sql = "INSERT INTO sensordata (wert) VALUES (?)";
+$sql = "INSERT INTO stefdata (wert) VALUES (?)";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$wert]);
 // $stmt->execute(["42"]);
