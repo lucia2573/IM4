@@ -17,7 +17,7 @@ try {
     http_response_code(500);
     echo json_encode(["status" => "error", "message" => "DB connection failed", "details" => $e->getMessage()]);
     exit;
-}
+}   
 
 try {
     // SQL-Abfrage: Alle Daten abrufen, sortiert nach Zeit absteigend

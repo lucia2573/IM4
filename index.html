@@ -1,59 +1,141 @@
-<!--------------------------------------------------------------------------------------------------- 
-  Kapitel 11: WLAN und Kommunikation via Internet  >  Website-to-LED (2 files - version)
-  website.html
-  Schalte LED am ESP32-C6 von dieser Website, wenn der HTML-Button gedrückt wird..
-  Wichtig: ändere die IP-Adresse bei fetch("http://...") zu der deines ESP32-C6.
-  Kein Upload auf Webserver notwendig
-  Programm funktioniert nur im lokalen WLAN (oder z. B. per VPN oder Port Forwarding)
-  Diese Website sendet JSON-formatierten Text via HTTP POST Request an "<MC's IP-Adresse>/postjson", um die LED zu steuern.
-  GitHub: https://github.com/Interaktive-Medien/im_physical_computing/tree/main/11_WLAN_und_Kommunikation_via_Internet/02_website2led_2files
------------------------------------------------------------------------------------------------------->
-
-
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <button id="btn">Drive LED</button>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hydration Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <img src="/bilder/Logo schwarz.png" alt="Logo" class="logo" />
+  </header>
 
-    <script>
-      let ledval = 0
-      document.querySelector("#btn").addEventListener("click", function () {
-        ledval = (ledval + 1) % 2;
-        // ledval = Math.random();
-        // JSON-Daten, die gesendet werden
-        const jsonData = {
-          wert: ledval
-        };
-        jsonstring = JSON.stringify(jsonData)
-        console.log(jsonstring);
+  <!-- Top Section -->
+  <section class="top">
+    <div class="top-content">
+      <div class="top-left">
+        <img src="/bilder/Bottle.png" alt="Bottle" class="bottle" />
+      </div>
 
-        // POST-Request mit fetch
-        fetch("http://192.168.0.117/postjson", {
-          method: "POST", // HTTP-Methode
-          headers: {
-            "Content-Type": "application/json", // Setze den Content-Type auf JSON
-          },
-          body: jsonstring, // Daten in JSON-String umwandeln und senden
-          mode: "no-cors"
-        })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+      <div class="top-right">
+        <div class="quote-box">
+          <blockquote class="quote">
+            „Wasser ist die treibende Kraft<br />der gesamten Natur.“
+          </blockquote>
+          <cite>&ndash; Leonardo da Vinci</cite>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="stats">
+          <div>Aktuelle Trinkmenge: <span class="highlight" id="menge-aktuell">0 L</span></div>
+          <div>Zielmenge: <span id="menge-ziel">2.5 L</span></div>
+          <div>Zuletzt Getrunken: <span class="highlight" id="letzte-zeit">–</span></div>
+        </div>
+        <div class="progress-bar">
+          <span>0 L</span>
+          <div class="bar"><div class="fill" id="progress-fill" style="width: 0%"></div></div>
+          <span>3 L</span>
+        </div>
+      </div>
+
+      <img src="/bilder/Waves.png" alt="Wave" class="wave-bg" />
+    </div>
+  </section>
+
+  <!-- Middle Section -->
+  <section class="middle">
+    <h2>Statistik</h2>
+    <p class="sub">Wochen Durchschnitt<br /><span class="date">18.03 - 24.03.2025</span></p>
+    <div class="graph-wrapper">
+      <button class="arrow left">&#9664;</button>
+      <canvas id="chart"></canvas>
+      <button class="arrow right">&#9654;</button>
+    </div>
+  </section>
+
+  <!-- Bottom Section -->
+  <section class="bottom">
+    <h2>Faktencheck!</h2>
+    <h3>Wie wichtig ist Wasser für unsere Gesundheit?</h3>
+    <div class="facts-grid">
+      <div class="fact">
+        <strong>Regulierung der Körpertemperatur:</strong>
+        <p>Wasser hilft, die Körpertemperatur durch Schwitzen und Verdunstung zu regulieren. Ohne genügend Flüssigkeit kann der Körper überhitzen.</p>
+      </div>
+      <div class="fact">
+        <strong>Unterstützung lebenswichtiger Körperfunktionen:</strong>
+        <p>Wasser ist essenziell für die Funktion von Organen wie Herz, Nieren und Gehirn. Es transportiert Nährstoffe, hilft bei der Verdauung und beim Ausscheiden von Abfallstoffen.</p>
+      </div>
+      <div class="bubble-image">
+        <img src="/bilder/turningbubbles.png" alt="Rotating Graphic" class="rotating" />
+      </div>
+      <div class="fact">
+        <strong>Leistungs- und Konzentrationsfähigkeit:</strong>
+        <p>Schon leichter Flüssigkeitsmangel kann zu Müdigkeit, Kopfschmerzen und Konzentrationsproblemen führen, besonders bei Kindern und älteren Menschen.</p>
+      </div>
+      <div class="fact">
+        <strong>Fördert gesunde Haut:</strong>
+        <p>Ausreichend Wasser verbessert die Hautelastizität und beugt Trockenheit vor. Es kann das Hautbild frischer und klarer wirken lassen.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <img src="/bilder/footer.png" alt="Bubbles" class="bubbles" />
+    <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">Zurück nach oben</button>
+  </footer>
+
+  <!-- Hydration Script -->
+  <script>
+    function ladeTrinkdaten() {
+      fetch("unload.php")
+        .then(res => res.json())
+        .then(json => {
+          const daten = json.daten;
+          if (!Array.isArray(daten)) return;
+
+          const heute = new Date().toISOString().split("T")[0];
+          let summeHeute = 0;
+          let letzterZeitpunkt = null;
+
+          daten.forEach(eintrag => {
+            const zeit = new Date(eintrag.zeit);
+            const datum = zeit.toISOString().split("T")[0];
+            const ml = parseFloat(eintrag.wert);
+
+            if (!isNaN(ml) && datum === heute) {
+              summeHeute += ml;
+            }
+
+            if (!letzterZeitpunkt || zeit > letzterZeitpunkt) {
+              letzterZeitpunkt = zeit;
+            }
+          });
+
+          const literHeute = summeHeute / 1000;
+          const zielLiter = 2.5;
+          const maxLiter = 3;
+
+          document.getElementById("menge-aktuell").textContent = literHeute.toFixed(2) + " L";
+          document.getElementById("menge-ziel").textContent = zielLiter + " L";
+
+          const prozent = Math.min((literHeute / maxLiter) * 100, 100);
+          document.getElementById("progress-fill").style.width = prozent + "%";
+
+          if (letzterZeitpunkt) {
+            const jetzt = new Date();
+            const diffMin = Math.round((jetzt - letzterZeitpunkt) / 60000);
+            document.getElementById("letzte-zeit").textContent = `vor ${diffMin} min`;
           }
-          return response.json(); // falls die Antwort JSON ist
-        })
-        .then((data) => {
-          console.log("Button clicked - Response received:", data);
-        })
-        .catch((error) => {
-          console.error("Button clicked - Error:", error);
         });
-      });
-    </script>
-  </body>
+    }
+
+    ladeTrinkdaten();
+    setInterval(ladeTrinkdaten, 10000); // alle 10 Sek.
+  </script>
+</body>
 </html>
