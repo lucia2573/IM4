@@ -1,82 +1,91 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de"> <!-- Setzt die Sprache der Seite auf Deutsch -->
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hydration Tracker</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" /> <!-- Zeichencodierung UTF-8 für Sonderzeichen -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Responsive Verhalten auf mobilen Geräten -->
+  <title>Hydration Tracker</title> <!-- Titel der Seite im Browser-Tab -->
+  <link rel="stylesheet" href="style.css" /> <!-- Einbinden der externen CSS-Datei -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js Bibliothek für Diagramme -->
 </head>
 <body>
   <!-- Header -->
   <header>
-    <img src="/bilder/Logo schwarz.png" alt="Logo" class="logo" />
+    <img src="/bilder/Logoschwarz.png" alt="Logo" class="logo"/> <!-- Logo oben links -->
   </header>
 
   <!-- Top Section -->
-  <section class="top">
-    <div class="top-content">
-      <div class="top-left">
+  <section class="top"> <!-- Oberer Bereich mit Zitat und Fortschrittsanzeige -->
+    <div class="top-content"> <!-- Wrapper für alle Inhalte im oberen Bereich -->
+
+      <div class="top-left"> <!-- Linker Bereich: Flaschenbild -->
         <img src="/bilder/Bottle.png" alt="Bottle" class="bottle" />
       </div>
 
-      <div class="top-right">
+      <div class="top-right"> <!-- Rechter Bereich: Zitat von Leonardo da Vinci -->
         <div class="quote-box">
           <blockquote class="quote">
             „Wasser ist die treibende Kraft<br />der gesamten Natur.“
           </blockquote>
-          <cite>&ndash; Leonardo da Vinci</cite>
+          <cite>&ndash; Leonardo da Vinci</cite> <!-- Quellenangabe für das Zitat -->
         </div>
       </div>
 
-      <div class="info-box">
+      <div class="info-box"> <!-- Infobereich mit Statistiken zur Wasseraufnahme -->
         <div class="stats">
           <div>Aktuelle Trinkmenge: <span class="highlight" id="menge-aktuell">0 L</span></div>
           <div>Zielmenge: <span id="menge-ziel">2.5 L</span></div>
           <div>Zuletzt Getrunken: <span class="highlight" id="letzte-zeit">–</span></div>
         </div>
-        <div class="progress-bar">
+        <div class="progress-bar"> <!-- Fortschrittsanzeige als Balken -->
           <span>0 L</span>
           <div class="bar"><div class="fill" id="progress-fill" style="width: 0%"></div></div>
           <span>3 L</span>
         </div>
       </div>
 
-      <img src="/bilder/Waves.png" alt="Wave" class="wave-bg" />
+      <img src="/bilder/Waves.png" alt="Wave" class="wave-bg" /> <!-- Dekoratives Wellenbild als Hintergrund -->
     </div>
   </section>
 
   <!-- Middle Section -->
-  <section class="middle">
-    <h2>Statistik</h2>
-    <p class="sub">Wochen Durchschnitt<br /><span class="date">18.03 - 24.03.2025</span></p>
-    <div class="graph-wrapper">
-      <button class="arrow left">&#9664;</button>
-      <canvas id="chart"></canvas>
-      <button class="arrow right">&#9654;</button>
+  <section class="middle"> <!-- Mittlerer Bereich mit Statistik-Diagramm -->
+    <h2>Statistik</h2> <!-- Überschrift -->
+    <p class="sub">Wochen Durchschnitt<br /><span class="date">(22.05 - 28.05.2025)</span></p> <!-- Untertitel mit Zeitraum -->
+    
+    <div class="graph-wrapper"> <!-- Wrapper für Diagramm-Container -->
+      <div class="chart-box"> <!-- Box mit Hintergrund und Schatten für das Diagramm -->
+        <canvas id="chart"></canvas> <!-- HTML5-Canvas für das Chart.js-Diagramm -->
+      </div>
     </div>
   </section>
 
   <!-- Bottom Section -->
-  <section class="bottom">
-    <h2>Faktencheck!</h2>
-    <h3>Wie wichtig ist Wasser für unsere Gesundheit?</h3>
-    <div class="facts-grid">
-      <div class="fact">
+  <section class="bottom"> <!-- Unterer Bereich mit Fakten zu Wasser -->
+    <h2>Faktencheck!</h2> <!-- Hauptüberschrift -->
+    <h3>Wie wichtig ist Wasser für unsere Gesundheit?</h3> <!-- Unterüberschrift -->
+    
+    <div class="facts-grid"> <!-- Grid-System für 4 Fakten mit einer Grafik in der Mitte -->
+
+      <div class="fact1"> <!-- Erster Fakt -->
         <strong>Regulierung der Körpertemperatur:</strong>
         <p>Wasser hilft, die Körpertemperatur durch Schwitzen und Verdunstung zu regulieren. Ohne genügend Flüssigkeit kann der Körper überhitzen.</p>
       </div>
-      <div class="fact">
+
+      <div class="fact2"> <!-- Zweiter Fakt -->
         <strong>Unterstützung lebenswichtiger Körperfunktionen:</strong>
         <p>Wasser ist essenziell für die Funktion von Organen wie Herz, Nieren und Gehirn. Es transportiert Nährstoffe, hilft bei der Verdauung und beim Ausscheiden von Abfallstoffen.</p>
       </div>
-      <div class="bubble-image">
+
+      <div class="bubble-image"> <!-- Zentrumsgrafik: animierte Blasen -->
         <img src="/bilder/turningbubbles.png" alt="Rotating Graphic" class="rotating" />
       </div>
-      <div class="fact">
+
+      <div class="fact3"> <!-- Dritter Fakt -->
         <strong>Leistungs- und Konzentrationsfähigkeit:</strong>
         <p>Schon leichter Flüssigkeitsmangel kann zu Müdigkeit, Kopfschmerzen und Konzentrationsproblemen führen, besonders bei Kindern und älteren Menschen.</p>
       </div>
-      <div class="fact">
+
+      <div class="fact4"> <!-- Vierter Fakt -->
         <strong>Fördert gesunde Haut:</strong>
         <p>Ausreichend Wasser verbessert die Hautelastizität und beugt Trockenheit vor. Es kann das Hautbild frischer und klarer wirken lassen.</p>
       </div>
@@ -84,58 +93,11 @@
   </section>
 
   <!-- Footer -->
-  <footer>
-    <img src="/bilder/footer.png" alt="Bubbles" class="bubbles" />
-    <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">Zurück nach oben</button>
+  <footer> <!-- Fußbereich mit dekorativem Bild und Button -->
+    <img src="/bilder/footer.png" alt="Bubbles" class="bubbles" /> <!-- Dekoratives Footerbild -->
+    <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">Zurück nach oben</button> <!-- Button zum sanften Hochscrollen -->
   </footer>
 
-  <!-- Hydration Script -->
-  <script>
-    function ladeTrinkdaten() {
-      fetch("unload.php")
-        .then(res => res.json())
-        .then(json => {
-          const daten = json.daten;
-          if (!Array.isArray(daten)) return;
-
-          const heute = new Date().toISOString().split("T")[0];
-          let summeHeute = 0;
-          let letzterZeitpunkt = null;
-
-          daten.forEach(eintrag => {
-            const zeit = new Date(eintrag.zeit);
-            const datum = zeit.toISOString().split("T")[0];
-            const ml = parseFloat(eintrag.wert);
-
-            if (!isNaN(ml) && datum === heute) {
-              summeHeute += ml;
-            }
-
-            if (!letzterZeitpunkt || zeit > letzterZeitpunkt) {
-              letzterZeitpunkt = zeit;
-            }
-          });
-
-          const literHeute = summeHeute / 1000;
-          const zielLiter = 2.5;
-          const maxLiter = 3;
-
-          document.getElementById("menge-aktuell").textContent = literHeute.toFixed(2) + " L";
-          document.getElementById("menge-ziel").textContent = zielLiter + " L";
-
-          const prozent = Math.min((literHeute / maxLiter) * 100, 100);
-          document.getElementById("progress-fill").style.width = prozent + "%";
-
-          if (letzterZeitpunkt) {
-            const jetzt = new Date();
-            const diffMin = Math.round((jetzt - letzterZeitpunkt) / 60000);
-            document.getElementById("letzte-zeit").textContent = `vor ${diffMin} min`;
-          }
-        });
-    }
-
-    ladeTrinkdaten();
-    setInterval(ladeTrinkdaten, 10000); // alle 10 Sek.
-  </script>
+  <script src="script.js"></script> <!-- Einbindung der JavaScript-Datei (für Dynamik wie Fortschrittsbalken, Uhrzeit etc.) -->
 </body>
 </html>
